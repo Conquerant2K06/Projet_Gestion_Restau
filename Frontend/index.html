@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Copa del Mare — Site client & solution de gestion</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="mode-public">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo" data-page="accueil">COPA DEL <span>MARE</span></div>
+    <div class="mode-switch">
+      <button class="on" data-mode="public">Site client</button>
+      <button data-mode="admin">Espace gestion</button>
+    </div>
+    <div class="top-actions">
+      <button data-page="panier">🛒 Panier <span id="cartCount" class="cart-count">0</span></button>
+      <button data-page="connexion" id="btnAuth">Connexion</button>
+    </div>
+  </div>
+</div>
+
+<!-- PUBLIC SUBNAV -->
+<div class="subnav subnav-public">
+  <div class="subnav-inner">
+    <button class="on" data-page="accueil">Accueil</button>
+    <button data-page="menu">Menu</button>
+    <button data-page="reservation">Réservation</button>
+    <button data-page="suivi">Suivi commande</button>
+    <button data-page="panier">Panier</button>
+    <button data-page="contact">Contact</button>
+    <button data-page="inscription">Créer un compte</button>
+  </div>
+</div>
+
+<!-- ADMIN SUBNAV -->
+<div class="subnav subnav-admin">
+  <div class="subnav-inner">
+    <button class="on" data-page="salle">Plan de salle</button>
+    <button data-page="commande">Prise de commande</button>
+    <button data-page="cuisine">Cuisine</button>
+    <button data-page="caisse">Caisse</button>
+    <button data-page="stock">Stocks</button>
+    <button data-page="dash">Tableau de bord</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ ACCUEIL ============ -->
+<section id="accueil" class="view on">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="tagline">RESTAURANT ITALIEN · GRAND-BASSAM</div>
+      <h1>La mer et l'Italie<br>dans votre assiette.</h1>
+      <p>Poissons frais livrés par les pêcheurs de Bassam, pizzas au feu de bois, pâtes maison. Une cuisine authentique face à l'océan, au cœur du Quartier France.</p>
+      <div class="hero-actions">
+        <button class="btn" data-page="menu">Voir le menu →</button>
+        <button class="btn ghost" data-page="reservation">Réserver une table</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2>Plats signature</h2>
+    <button class="btn ghost sm" data-page="menu">Tout le menu →</button>
+  </div>
+  <div class="prod-grid" id="signatureGrid"></div>
+
+  <div class="cards" style="margin-top:30px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+    <div class="card"><div style="font-size:32px;margin-bottom:8px">🌊</div><h3>Poissons frais du jour</h3>
+      <p style="font-size:13px;color:var(--gris);margin:0">Livrés chaque matin par les pêcheurs de Bassam.</p></div>
+    <div class="card"><div style="font-size:32px;margin-bottom:8px">🔥</div><h3>Pizzas au feu de bois</h3>
+      <p style="font-size:13px;color:var(--gris);margin:0">Plus de 30 pizzas préparées à la commande.</p></div>
+    <div class="card"><div style="font-size:32px;margin-bottom:8px">🚴</div><h3>Livraison Glovo</h3>
+      <p style="font-size:13px;color:var(--gris);margin:0">Commandez en ligne ou par téléphone.</p></div>
+    <div class="card"><div style="font-size:32px;margin-bottom:8px">🍷</div><h3>Cave à vin & bar</h3>
+      <p style="font-size:13px;color:var(--gris);margin:0">Vins italiens et cocktails maison.</p></div>
+  </div>
+</section>
+
+<!-- ============ MENU ============ -->
+<section id="menu" class="view">
+  <h1>Notre carte</h1>
+  <p class="muted">Poissons frais, pâtes, pizzas et spécialités italiennes.</p>
+  <div class="filters" id="categoryFilters"></div>
+  <div class="prod-grid" id="menuGrid"></div>
+</section>
+
+<!-- ============ PRODUIT ============ -->
+<section id="produit" class="view">
+  <button class="btn ghost sm" data-page="menu" style="margin-bottom:16px">← Retour au menu</button>
+  <div class="cart-layout">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="product-hero" id="pImg">🐟</div>
+    </div>
+    <div class="card">
+      <span class="tag" id="pCat">Poissons</span>
+      <h1 style="margin:10px 0 6px;font-size:24px" id="pName">Thon braisé</h1>
+      <div class="price-lg" id="pPrice">8 000 F</div>
+      <p class="muted" id="pDesc"></p>
+      <hr class="sep">
+      <div class="form-group"><label>Cuisson</label>
+        <select id="pCook"><option>Braisé</option><option>Frit</option><option>Grillé</option><option>À la vapeur</option></select>
+      </div>
+      <div class="form-group"><label>Note (allergies, préférences)</label>
+        <input type="text" id="pNote" placeholder="Ex : sans piment"></div>
+      <div class="qty-row">
+        <div class="qty"><button id="qMinus">−</button><span id="pQty">1</span><button id="qPlus">+</button></div>
+        <span class="price-lg" id="pTotal">8 000 F</span>
+      </div>
+      <button class="btn vert block" id="btnAddToCart">Ajouter au panier</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PANIER ============ -->
+<section id="panier" class="view">
+  <h1>Mon panier</h1>
+  <div class="cart-layout">
+    <div class="card" id="cartItems"></div>
+    <div>
+      <div class="card">
+        <h3 style="margin-bottom:12px">Récapitulatif</h3>
+        <div class="totals-row"><span>Sous-total</span><span id="cartSubtotal">0 F</span></div>
+        <div class="totals-row"><span>Livraison</span><span id="cartDelivery">1 500 F</span></div>
+        <div class="totals-row"><span>Remise fidélité</span><span style="color:var(--vert)" id="cartDiscount">−0 F</span></div>
+        <div class="totals-row big"><span>Total</span><span id="cartTotal">0 F</span></div>
+        <button class="btn vert block" style="margin-top:16px" data-page="checkout">Passer commande →</button>
+        <button class="btn ghost block" style="margin-top:8px" data-page="menu">Continuer mes achats</button>
+      </div>
+      <div class="card" style="margin-top:14px;background:#faf7f1">
+        <p style="font-size:12px;color:var(--gris);margin:0">💡 Commandez par téléphone au <b>07 12 40 12 40</b> ou via Glovo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHECKOUT ============ -->
+<section id="checkout" class="view">
+  <h1>Finaliser ma commande</h1>
+  <div class="cart-layout">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <h3>Mode de réception</h3>
+        <div class="filters" style="margin-bottom:0">
+          <button class="on">🚴 Livraison</button><button>🛍️ Retrait</button><button>🍽️ Sur place</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Coordonnées</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Nom</label><input type="text" placeholder="Kadio"></div>
+          <div class="form-group"><label>Prénom</label><input type="text" placeholder="Elio"></div>
+        </div>
+        <div class="form-group"><label>Téléphone</label><input type="tel" placeholder="07 12 40 12 40"></div>
+        <div class="form-group"><label>Adresse de livraison</label><textarea placeholder="Quartier France, Grand-Bassam…"></textarea></div>
+        <div class="form-group"><label>Instructions (facultatif)</label><input type="text" placeholder="Immeuble bleu, 2e étage…"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Paiement</h3>
+      <div class="filters" style="margin-bottom:12px">
+        <button class="on">Wave</button><button>Orange Money</button><button>MTN</button><button>Carte</button><button>Espèces</button>
+      </div>
+      <div class="totals-row"><span>Sous-total</span><span id="coSubtotal">0 F</span></div>
+      <div class="totals-row"><span>Livraison</span><span>1 500 F</span></div>
+      <div class="totals-row big"><span>Total</span><span id="coTotal">0 F</span></div>
+      <button class="btn vert block" style="margin-top:16px" id="btnConfirmOrder">Confirmer la commande</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUIVI ============ -->
+<section id="suivi" class="view">
+  <h1>Suivi de commande</h1>
+  <div class="card" style="max-width:640px">
+    <div class="form-row">
+      <div class="form-group"><label>Numéro de commande</label><input type="text" value="CMD-2026-0148"></div>
+      <div style="display:flex;align-items:flex-end;padding-bottom:14px"><button class="btn block">Rechercher</button></div>
+    </div>
+    <hr class="sep">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px"><b>Commande CMD-2026-0148</b><span class="tag res">En cours</span></div>
+    <p class="muted">Passée le 14/10/2026 à 20:14 · Livraison · 26 000 F</p>
+    <div class="timeline">
+      <div class="tl-step done"><h4>Commande reçue</h4><p>20:14 · Validée par le restaurant</p></div>
+      <div class="tl-step done"><h4>En préparation</h4><p>20:16 · Le chef a démarré la préparation</p></div>
+      <div class="tl-step active"><h4>Prête</h4><p>20:32 · En attente du livreur</p></div>
+      <div class="tl-step"><h4>En livraison</h4><p>Le livreur est en route</p></div>
+      <div class="tl-step"><h4>Livrée</h4><p>À venir</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RÉSERVATION ============ -->
+<section id="reservation" class="view">
+  <h1>Réserver une table</h1>
+  <div class="cart-layout">
+    <div class="card">
+      <div class="form-row">
+        <div class="form-group"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
+        <div class="form-group"><label>Téléphone</label><input type="tel" placeholder="07 12 40 12 40"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date</label><input type="date"></div>
+        <div class="form-group"><label>Heure</label><input type="time" value="20:30"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Couverts</label><select><option>2 personnes</option><option>3 personnes</option><option>4 personnes</option><option>5 personnes</option><option>6 personnes</option><option>+ de 6</option></select></div>
+        <div class="form-group"><label>Espace</label><select><option>Salle</option><option>Terrasse</option><option>Bar</option><option>Cave à vin</option></select></div>
+      </div>
+      <div class="form-group"><label>Occasion (facultatif)</label><select><option>Aucune</option><option>Anniversaire</option><option>Dîner romantique</option><option>Repas d'affaires</option></select></div>
+      <div class="form-group"><label>Demande spéciale</label><textarea placeholder="Allergies, préférences…"></textarea></div>
+      <div class="checkbox-row"><input type="checkbox" id="acompte"><label for="acompte">Verser un acompte de 5 000 F par Wave pour garantir ma réservation.</label></div>
+      <button class="btn vert block" id="btnResa">Confirmer la réservation</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px"><h3>📍 Nous trouver</h3>
+        <p class="muted">Quartier France, Grand-Bassam<br>Côte d'Ivoire<br><br><b>Tél :</b> 07 12 40 12 40</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>🕐 Horaires</h3>
+        <p class="muted">Lun – Dim : 12h – 23h<br>Service continu le week-end</p></div>
+      <div class="card"><h3>💡 Bon à savoir</h3>
+        <p class="muted">Pour les groupes de +8 personnes, appelez-nous. La cave à vin est privatisable sur demande.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="view">
+  <h1>Nous contacter</h1>
+  <div class="cart-layout">
+    <div class="card">
+      <div class="form-group"><label>Nom</label><input type="text"></div>
+      <div class="form-group"><label>Email</label><input type="email"></div>
+      <div class="form-group"><label>Sujet</label><select><option>Renseignement</option><option>Réclamation</option><option>Événement privé</option><option>Partenariat</option></select></div>
+      <div class="form-group"><label>Message</label><textarea></textarea></div>
+      <button class="btn block" id="btnContact">Envoyer</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px"><h3>Adresse</h3>
+        <p class="muted">Quartier France<br>Grand-Bassam, Côte d'Ivoire<br>Code Plus : 57W5+H89</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Suivez-nous</h3>
+        <p style="font-size:13px;margin:0"><a href="#">Instagram @copadelmare.ci</a></p>
+        <p style="font-size:13px;margin:6px 0 0"><a href="#">Glovo · Commander en ligne</a></p></div>
+      <div class="card"><h3>Note Google</h3>
+        <p class="muted">⭐ 4,6 / 5 · 89 avis</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONNEXION ============ -->
+<section id="connexion" class="view">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <div class="logo-big">COPA DEL <span>MARE</span></div>
+      <p>BY ELIO · GRAND-BASSAM</p>
+    </div>
+    <h2>Connexion</h2>
+    <div class="form-group"><label>Email ou téléphone</label><input type="text" placeholder="elio@copadelmare.ci"></div>
+    <div class="form-group"><label>Mot de passe</label><input type="password" placeholder="••••••••"></div>
+    <div class="form-flex">
+      <label style="display:flex;gap:6px;align-items:center;font-size:12px;color:#555"><input type="checkbox"> Se souvenir de moi</label>
+      <a href="#" style="font-size:12px">Mot de passe oublié ?</a>
+    </div>
+    <button class="btn block" id="btnLogin">Se connecter</button>
+    <div class="divider">ou</div>
+    <div class="social-row"><button>📱 Wave</button><button>🔵 Google</button></div>
+    <div class="auth-alt">Pas encore de compte ? <a href="#" data-page="inscription">Créer un compte</a></div>
+  </div>
+</section>
+
+<!-- ============ INSCRIPTION ============ -->
+<section id="inscription" class="view">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <div class="logo-big">COPA DEL <span>MARE</span></div>
+      <p>BY ELIO · GRAND-BASSAM</p>
+    </div>
+    <h2>Créer un compte</h2>
+    <div class="form-row">
+      <div class="form-group"><label>Prénom</label><input type="text" placeholder="Elio"></div>
+      <div class="form-group"><label>Nom</label><input type="text" placeholder="Kadio"></div>
+    </div>
+    <div class="form-group"><label>Email</label><input type="email" placeholder="vous@exemple.com"></div>
+    <div class="form-group"><label>Téléphone</label><input type="tel" placeholder="07 12 40 12 40"></div>
+    <div class="form-group"><label>Mot de passe</label><input type="password" placeholder="8 caractères minimum"></div>
+    <div class="form-group"><label>Confirmer le mot de passe</label><input type="password"></div>
+    <div class="checkbox-row"><input type="checkbox" id="cgu"><label for="cgu">J'accepte les <a href="#">conditions générales</a> et la <a href="#">politique de confidentialité</a>.</label></div>
+    <button class="btn vert block" id="btnRegister">Créer mon compte</button>
+    <div class="auth-alt">Déjà inscrit ? <a href="#" data-page="connexion">Se connecter</a></div>
+  </div>
+</section>
+
+<!-- ============ MON COMPTE ============ -->
+<section id="compte" class="view">
+  <h1>Mon compte</h1>
+  <div class="cart-layout">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <h3>Profil</h3>
+        <p style="font-size:14px;margin:6px 0"><b>Elio Kadio</b></p>
+        <p class="muted" style="margin:0">elio@copadelmare.ci · 07 12 40 12 40</p>
+        <button class="btn ghost sm" style="margin-top:12px">Modifier</button>
+      </div>
+      <div class="card">
+        <h3>Historique des commandes</h3>
+        <table>
+          <tr><th>N°</th><th>Date</th><th>Total</th><th>Statut</th></tr>
+          <tr><td>CMD-0148</td><td>14/10/26</td><td>26 000 F</td><td><span class="tag res">En cours</span></td></tr>
+          <tr><td>CMD-0141</td><td>10/10/26</td><td>18 500 F</td><td><span class="tag libre">Livrée</span></td></tr>
+          <tr><td>CMD-0122</td><td>02/10/26</td><td>32 000 F</td><td><span class="tag libre">Livrée</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3>Points fidélité</h3>
+        <div style="font-size:32px;font-weight:800;color:var(--or)">240 pts</div>
+        <p class="muted">Encore 60 points pour une pizza offerte !</p>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <h3>Adresses</h3>
+        <p style="font-size:13px;margin:0">🏠 Domicile<br><span style="color:var(--gris)">Quartier France, Grand-Bassam</span></p>
+        <button class="btn ghost sm" style="margin-top:10px">+ Ajouter</button>
+      </div>
+      <button class="btn rouge block" id="btnLogout">Se déconnecter</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMIN : SALLE ============ -->
+<section id="salle" class="view">
+  <h2>Plan de salle — Service du soir</h2>
+  <div class="cards" id="tablesGrid"></div>
+  <p style="margin-top:14px">
+    <button class="btn">+ Nouvelle commande</button>
+    <button class="btn or">+ Réservation</button>
+  </p>
+</section>
+
+<!-- ============ ADMIN : COMMANDE ============ -->
+<section id="commande" class="view">
+  <h2>Prise de commande — Table 2</h2>
+  <div class="cart-layout">
+    <div class="prod-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))" id="adminMenuGrid"></div>
+    <div class="card">
+      <b>Panier</b>
+      <div id="adminCartItems"></div>
+      <div class="totals-row big"><span>Total TTC</span><span id="adminCartTotal">0 F</span></div>
+      <button class="btn vert block" id="btnSendKitchen">Envoyer en cuisine</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMIN : CUISINE ============ -->
+<section id="cuisine" class="view">
+  <h2>Écran cuisine (KDS)</h2>
+  <div class="kds">
+    <div class="ticket"><b>Table 2 · 20:14</b>Thon braisé ×2<br>Pizza Mare ×1<br><small>⏱ 02:41</small><br><button class="btn sm" style="margin-top:8px">Démarrer</button></div>
+    <div class="ticket" style="border-left-color:var(--vert)"><b>Table 5 · 20:09</b>Pâtes fruits de mer ×1<br><small>⏱ 07:12 · en cours</small><br><button class="btn vert sm" style="margin-top:8px">Prêt</button></div>
+    <div class="ticket" style="border-left-color:var(--bleu)"><b>Glovo · 20:05</b>Poisson frit ×2<br><small>Prêt depuis 1 min</small><br><button class="btn or sm" style="margin-top:8px">Notifier serveur</button></div>
+  </div>
+</section>
+
+<!-- ============ ADMIN : CAISSE ============ -->
+<section id="caisse" class="view">
+  <h2>Caisse — Table 2</h2>
+  <div class="cart-layout">
+    <div class="card">
+      <div class="totals-row"><span>Thon braisé ×2</span><span>16 000 F</span></div>
+      <div class="totals-row"><span>Pizza Mare ×1</span><span>9 000 F</span></div>
+      <div class="totals-row"><span>Remise fidélité</span><span style="color:var(--vert)">−500 F</span></div>
+      <div class="totals-row big"><span>Total à payer</span><span>24 500 F</span></div>
+    </div>
+    <div class="card">
+      <b>Moyen de paiement</b>
+      <p><button class="btn block">Espèces</button></p>
+      <p><button class="btn block">Carte bancaire</button></p>
+      <p><button class="btn or block">Wave</button></p>
+      <p><button class="btn block">Orange / MTN Money</button></p>
+      <p><button class="btn block">Crédit entreprise</button></p>
+      <p><button class="btn vert block">Encaisser 24 500 F</button></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMIN : STOCKS ============ -->
+<section id="stock" class="view">
+  <h2>Stocks & approvisionnements</h2>
+  <table>
+    <tr><th>Ingrédient</th><th>Stock</th><th>Seuil</th><th>Statut</th></tr>
+    <tr><td>Thon frais</td><td>12 kg</td><td>8 kg</td><td><span class="tag libre">OK</span></td></tr>
+    <tr><td>Mozzarella</td><td>3 kg</td><td>5 kg</td><td><span class="tag occ">Alerte</span></td></tr>
+    <tr><td>Farine (pizza)</td><td>40 kg</td><td>15 kg</td><td><span class="tag libre">OK</span></td></tr>
+    <tr><td>Vin blanc (cave)</td><td>6 bouteilles</td><td>10</td><td><span class="tag res">À commander</span></td></tr>
+  </table>
+  <p style="margin-top:14px">
+    <button class="btn">Inventaire</button>
+    <button class="btn or">Bon de commande</button>
+    <button class="btn vert">Arrivage poisson</button>
+  </p>
+</section>
+
+<!-- ============ ADMIN : DASHBOARD ============ -->
+<section id="dash" class="view">
+  <h2>Tableau de bord — Gérant</h2>
+  <div class="cards">
+    <div class="stat-card"><div class="t">CA du jour</div><div class="big">412 000 F</div></div>
+    <div class="stat-card"><div class="t">Ticket moyen</div><div class="big">12 480 F</div></div>
+    <div class="stat-card"><div class="t">Couverts</div><div class="big">33</div></div>
+    <div class="stat-card"><div class="t">Commandes Glovo</div><div class="big">11</div></div>
+  </div>
+  <table style="margin-top:14px">
+    <tr><th>Plat</th><th>Vendus</th><th>Marge</th></tr>
+    <tr><td>Thon braisé</td><td>14</td><td>62 %</td></tr>
+    <tr><td>Pizza Mare</td><td>11</td><td>71 %</td></tr>
+    <tr><td>Pâtes fruits de mer</td><td>8</td><td>58 %</td></tr>
+  </table>
+  <p style="margin-top:14px">
+    <button class="btn">Exporter PDF</button>
+    <button class="btn vert">Exporter Excel</button>
+  </p>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col"><h4>Copa del Mare</h4>
+      <p>Restaurant italien · spécialités de la mer<br>Quartier France, Grand-Bassam<br>Côte d'Ivoire</p></div>
+    <div class="footer-col"><h4>Contact</h4>
+      <p><a href="tel:+2250712401240">07 12 40 12 40</a><br><a href="#">Instagram @copadelmare.ci</a><br><a href="#">Glovo · Livraison</a></p></div>
+    <div class="footer-col"><h4>Horaires</h4>
+      <p>Lun – Dim<br>12h00 – 23h00<br>Service continu le week-end</p></div>
+    <div class="footer-col"><h4>Liens</h4>
+      <p><a href="#" data-page="menu">Menu</a><br><a href="#" data-page="reservation">Réservation</a><br><a href="#" data-page="contact">Contact</a></p></div>
+  </div>
+  <div class="footer-bottom">© 2026 Copa del Mare by Elio — Prototype UX · Cahier des charges v1.0</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
